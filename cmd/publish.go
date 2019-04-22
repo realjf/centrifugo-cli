@@ -7,7 +7,7 @@ import (
 
 func init() {
 	rootCmd.AddCommand(publishCmd)
-	publishCmd.PersistentFlags().StringArrayVarP(&Channels, "channels", "cs", []string{}, "channels key")
+	publishCmd.PersistentFlags().StringArrayVarP(&Channels, "channels", "c", []string{}, "channels key")
 	publishCmd.PersistentFlags().StringArrayVarP(&Data, "data", "d", []string{}, "messages to be sent")
 }
 
