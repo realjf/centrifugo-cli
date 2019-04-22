@@ -11,7 +11,7 @@ func init() {
 
 var infoCmd = &cobra.Command{
 	Use:   "info",
-	Short: "show centrifugo server information",
+	Short: "allows to get information about running Centrifugo nodes",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("info")
 	},

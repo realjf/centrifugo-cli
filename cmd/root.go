@@ -9,10 +9,6 @@ import (
 	"time"
 )
 
-var Secret string
-var ApiKey string
-var Token string
-
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&ApiKey, "api-key", "k", "", "set api key for http api")
 	rootCmd.PersistentFlags().StringVarP(&Secret, "secret", "s", "", "secret key for http api")

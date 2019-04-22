@@ -5,10 +5,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var Address string
-var Port int
-var Engine string
-
 func init() {
 	rootCmd.AddCommand(connectCmd)
 	connectCmd.PersistentFlags().StringVarP(&Address, "address", "a", "", "bind your centrifugo to specific interface address")
