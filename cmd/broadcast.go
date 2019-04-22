@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
 
 func init() {
 	rootCmd.AddCommand(broadcastCmd)
-	broadcastCmd.PersistentFlags().StringArrayVarP(&Channels, "channels", "cs", []string{}, "channels key")
+	broadcastCmd.PersistentFlags().StringArrayVarP(&Channels, "channels", "c", []string{}, "channels key")
 	broadcastCmd.PersistentFlags().StringArrayVarP(&Data, "data", "d", []string{}, "messages to be sent")
 }
 
