@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +13,7 @@ var infoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "allows to get information about running Centrifugo nodes",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("info")
+		logrus.Infoln("requesting...")
+		Request("GET", "/api", "{\"method\":\"info\", \"params\":{}}")
 	},
 }

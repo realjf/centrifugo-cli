@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func init() {
@@ -24,6 +25,32 @@ func GetPath() string {
 	return fmt.Sprintf("/connection")
 }
 
+func Request(method string, path string, data string) {
+	client := http.Client{}
+	uri := url.URL{}
+	uri.Host = GetHost()
+	uri.Scheme = "http"
+	uri.Path = path
+	req, err := http.NewRequest(method, uri.String(), strings.NewReader(data))
+	if err != nil {
+		logrus.Error(err)
+	}
+	req.Header.Set("Authentication", "token "+_token())
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Connection", "keep-alive")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		logrus.Error(err)
+	}
+	response, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		logrus.Error(err)
+	}
+	logrus.Infof("%s", string(response))
+}
+
 var connectCmd = &cobra.Command{
 	Use:   "connect",
 	Short: "connect to centrifugo server",
@@ -33,25 +60,6 @@ var connectCmd = &cobra.Command{
 		logrus.Infof("engine：%s", Engine)
 		logrus.Infoln("connecting...")
 		logrus.Infof("token：%s", _token())
-		client := http.Client{}
-		var req = new(http.Request)
-		req.Header = http.Header{}
-		req.Header.Set("Authentication", "token "+_token())
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("Connection", "keep-alive")
-		req.URL = new(url.URL)
-		req.URL.Host = Address
-		req.URL.Scheme = "http"
-		req.URL.Path = GetPath()
-		resp, err := client.Do(req)
-		if err != nil {
-			logrus.Error(err)
-		}
-		response, err := ioutil.ReadAll(resp.Body)
-		defer resp.Body.Close()
-		if err != nil {
-			logrus.Error(err)
-		}
-		logrus.Infof("%s", string(response))
+		Request("GET", GetPath(), "")
 	},
 }

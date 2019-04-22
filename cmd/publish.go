@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +15,7 @@ var publishCmd = &cobra.Command{
 	Use:   "publish",
 	Short: "allows to publish data into channel",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("publish")
+		logrus.Infoln("publishing...")
+		Request("GET", "/api", "")
 	},
 }
