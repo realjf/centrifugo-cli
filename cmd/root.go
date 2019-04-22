@@ -11,7 +11,7 @@ import (
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&ApiKey, "api-key", "k", "", "set api key for http api")
-	rootCmd.PersistentFlags().StringVarP(&Secret, "secret", "s", "", "secret key for http api")
+	rootCmd.PersistentFlags().StringVarP(&Secret, "secret", "s", "178e1a29-fbc8-4422-a47e-3b66a411677b", "secret key for http api")
 	rootCmd.PersistentFlags().Bool("viper", true, "Use Viper for configuration")
 	viper.SetDefault("author", "Real JF <real_jf@hotmail.com>")
 	viper.SetDefault("license", "apache")

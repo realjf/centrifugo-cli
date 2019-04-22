@@ -41,6 +41,7 @@ var connectCmd = &cobra.Command{
 		req.Header.Set("Connection", "keep-alive")
 		req.URL = new(url.URL)
 		req.URL.Host = Address
+		req.URL.Scheme = "http"
 		req.URL.Path = GetPath()
 		resp, err := client.Do(req)
 		if err != nil {
