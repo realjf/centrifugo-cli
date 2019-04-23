@@ -19,6 +19,8 @@ var Channels []string
 
 var Data []string
 
+var ConnectProtocol string // websocket|http
+
 func init() {
 	rootCmd.AddCommand(configCmd)
 }

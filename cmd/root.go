@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/net/websocket"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -93,5 +94,26 @@ func Request(method string, path string, data string, header map[string]string) 
 }
 
 func WebSocket() {
+	http.Handle("/upper", websocket.Handler(upper))
 
+	if err := http.ListenAndServe(":9999", nil); err != nil {
+		logrus.Info(err)
+		os.Exit(1)
+	}
+}
+
+func upper(ws *websocket.Conn) {
+	var err error
+	for {
+		var reply string
+		if err = websocket.Message.Receive(ws, &reply); err != nil {
+			logrus.Info(err)
+			continue
+		}
+
+		if err = websocket.Message.Send(ws, strings.ToUpper(reply)); err != nil {
+			logrus.Info(err)
+			continue
+		}
+	}
 }
