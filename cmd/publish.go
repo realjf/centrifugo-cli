@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -16,6 +17,17 @@ var publishCmd = &cobra.Command{
 	Short: "allows to publish data into channel",
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Infoln("publishing...")
-		Request("GET", "/api", "", nil)
+		data := map[string]interface{}{
+			"method": "publish",
+			"parmas": map[string]interface{}{
+				"channel": Channel,
+				"data":    Data,
+			},
+		}
+		dataJsonStr, err := json.Marshal(data)
+		if err != nil {
+			logrus.Error(err)
+		}
+		Request("POST", "/api", string(dataJsonStr), nil)
 	},
 }
