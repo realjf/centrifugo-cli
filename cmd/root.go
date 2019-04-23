@@ -1,11 +1,17 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"io/ioutil"
+	"net/http"
+	"net/url"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -43,4 +49,49 @@ func _token() string {
 		return ""
 	}
 	return Token
+}
+
+func GetHost() string {
+	return fmt.Sprintf("%s", Address)
+}
+
+func GetPath() string {
+	return fmt.Sprintf("/connection/")
+}
+
+func Request(method string, path string, data string, header map[string]string) {
+	client := http.Client{}
+	uri := url.URL{}
+	uri.Host = GetHost()
+	if Port > 0 && Port < 65536 {
+		uri.Host = GetHost() + ":" + strconv.Itoa(Port)
+	}
+	uri.Scheme = "http"
+	uri.Path = path
+	logrus.Infof("uri：%s", uri.String())
+	req, err := http.NewRequest(method, uri.String(), strings.NewReader(data))
+	if err != nil {
+		logrus.Error(err)
+	}
+	req.Header.Set("Authentication", "token "+_token())
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Connection", "keep-alive")
+	for k, v := range header {
+		req.Header.Set(k, v)
+	}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		logrus.Error(err)
+	}
+	response, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+	if err != nil {
+		logrus.Error(err)
+	}
+	logrus.Infof("%s", string(response))
+}
+
+func WebSocket() {
+
 }
