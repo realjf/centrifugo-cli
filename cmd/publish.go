@@ -16,6 +16,6 @@ var publishCmd = &cobra.Command{
 	Short: "allows to publish data into channel",
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Infoln("publishing...")
-		Request("GET", "/api", "")
+		Request("GET", "/api", "", nil)
 	},
 }
