@@ -70,11 +70,12 @@ func Request(method string, path string, data string, header map[string]string) 
 	uri.Scheme = "http"
 	uri.Path = path
 	logrus.Infof("uri：%s", uri.String())
+	logrus.Infof("post data: %v", data)
 	req, err := http.NewRequest(method, uri.String(), strings.NewReader(data))
 	if err != nil {
 		logrus.Error(err)
 	}
-	req.Header.Set("Authentication", "apikey "+_token())
+	req.Header.Set("Authentication", "token "+_token())
 	req.Header.Set("Content-Type", "application/json")
 	for k, v := range header {
 		req.Header.Set(k, v)
