@@ -19,7 +19,7 @@ var publishCmd = &cobra.Command{
 		logrus.Infoln("publishing...")
 		data := map[string]interface{}{
 			"method": "publish",
-			"parmas": map[string]interface{}{
+			"params": map[string]interface{}{
 				"channel": Channel,
 				"data":    Data,
 			},

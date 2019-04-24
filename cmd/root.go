@@ -77,6 +77,7 @@ func Request(method string, path string, data string, header map[string]string) 
 	}
 	req.Header.Set("Authentication", "token "+_token())
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("COnnection", "keep-alive")
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}

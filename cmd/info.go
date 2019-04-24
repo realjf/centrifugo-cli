@@ -17,7 +17,7 @@ var infoCmd = &cobra.Command{
 		logrus.Infoln("requesting...")
 		data := map[string]interface{}{
 			"method": "info",
-			"parmas": struct {
+			"params": struct {
 			}{},
 		}
 		dataJsonStr, err := json.Marshal(data)

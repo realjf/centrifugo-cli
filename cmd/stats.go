@@ -17,7 +17,7 @@ var presenceStatsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		data := map[string]interface{}{
 			"method": "presence_stats",
-			"parmas": map[string]interface{}{
+			"params": map[string]interface{}{
 				"channel": Channel,
 			},
 		}
