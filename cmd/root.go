@@ -60,6 +60,11 @@ func GetPath() string {
 	return fmt.Sprintf("/connection/")
 }
 
+type params struct {
+	Method string                 `json:"method"`
+	Params map[string]interface{} `json:"params"`
+}
+
 func Request(method string, path string, data string, header map[string]string) {
 	client := http.Client{}
 	uri := url.URL{}
@@ -75,9 +80,9 @@ func Request(method string, path string, data string, header map[string]string) 
 	if err != nil {
 		logrus.Error(err)
 	}
-	req.Header.Set("Authentication", "token "+_token())
+	req.Header.Set("Authentication", "apikey "+_token())
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("COnnection", "keep-alive")
+	req.Header.Set("Connection", "keep-alive")
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
