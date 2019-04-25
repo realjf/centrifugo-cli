@@ -14,6 +14,7 @@ func init() {
 var publishCmd = &cobra.Command{
 	Use:   "publish",
 	Short: "allows to publish data into channel",
+	Long:  `publish -c=channel#userId -d=data`,
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Infoln("publishing...")
 		data := params{
