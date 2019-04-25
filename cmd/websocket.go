@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
+	"net/http"
 	"net/url"
 	"strconv"
 	"time"
 )
 
-func WebSocket(cmds []params) {
+func WebSocket(cmds []params, header http.Header) {
 	uri := url.URL{
 		Scheme: "ws",
-		Host:   Address,
-		Path:   "/connection/websocket",
+		Path:   Path,
 	}
 	uri.Host = GetHost()
 	if Port > 0 && Port < 65536 {
@@ -30,8 +30,11 @@ func WebSocket(cmds []params) {
 		}
 	}
 
+	logrus.Infof("request uri: %v", uri.String())
+	logrus.Infof("request header: %v", header)
+	logrus.Infof("request data: %v", cmds)
 	var dialer *websocket.Dialer
-	conn, _, err := dialer.Dial(uri.String(), nil)
+	conn, _, err := dialer.Dial(uri.String(), header)
 	if err != nil {
 		logrus.Error(err)
 		return

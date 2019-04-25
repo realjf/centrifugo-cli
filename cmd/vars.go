@@ -17,6 +17,8 @@ var UserID uint32
 var Channel string // 当前channel
 var Channels []string
 
+var Path string // websocket path
+
 var Data string
 
 func init() {

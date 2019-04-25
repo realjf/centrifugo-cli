@@ -11,6 +11,7 @@ func init() {
 	connectCmd.PersistentFlags().IntVarP(&Port, "port", "p", 8000, "port to bind centrifugo to")
 	connectCmd.PersistentFlags().StringVarP(&Engine, "engine", "e", "memory", "engine to use - memory or redis")
 	connectCmd.PersistentFlags().Uint32VarP(&UserID, "user", "u", 0, "user id")
+	connectCmd.PersistentFlags().StringVarP(&Path, "path", "l", "/connection/websocket", "websocket path to bind")
 }
 
 var connectCmd = &cobra.Command{
@@ -34,7 +35,7 @@ var connectCmd = &cobra.Command{
 				}{},
 			},
 		}
-		WebSocket([]params{data})
+		WebSocket([]params{data}, nil)
 		//Request("POST", "/api", []params{data}, nil)
 	},
 }
