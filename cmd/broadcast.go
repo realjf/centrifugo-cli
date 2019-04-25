@@ -5,13 +5,22 @@ import "github.com/spf13/cobra"
 func init() {
 	rootCmd.AddCommand(broadcastCmd)
 	broadcastCmd.PersistentFlags().StringArrayVarP(&Channels, "channels", "c", []string{}, "channels key")
-	broadcastCmd.PersistentFlags().StringArrayVarP(&Data, "data", "d", []string{}, "messages to be sent")
+	broadcastCmd.PersistentFlags().StringVarP(&Data, "data", "d", "", "messages to be sent")
 }
 
 var broadcastCmd = &cobra.Command{
 	Use:   "broadcast",
 	Short: "similar to publish but allows to send the same data into many channels",
 	Run: func(cmd *cobra.Command, args []string) {
-
+		data := params{
+			Method: "broadcast",
+			Params: map[string]interface{}{
+				"channels": Channels,
+				"data": map[string]string{
+					"text": Data,
+				},
+			},
+		}
+		Request("POST", "/api", []params{data}, nil)
 	},
 }

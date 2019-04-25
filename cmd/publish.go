@@ -1,15 +1,14 @@
 package cmd
 
 import (
-	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 func init() {
 	rootCmd.AddCommand(publishCmd)
-	publishCmd.PersistentFlags().StringArrayVarP(&Channels, "channels", "c", []string{}, "channels key")
-	publishCmd.PersistentFlags().StringArrayVarP(&Data, "data", "d", []string{}, "messages to be sent")
+	publishCmd.PersistentFlags().StringVarP(&Channel, "channel", "c", "", "channel key")
+	publishCmd.PersistentFlags().StringVarP(&Data, "data", "d", "", "messages to be sent")
 }
 
 var publishCmd = &cobra.Command{
@@ -21,13 +20,12 @@ var publishCmd = &cobra.Command{
 			Method: "publish",
 			Params: map[string]interface{}{
 				"channel": Channel,
-				"data":    Data,
+				"data": map[string]string{
+					"text": Data,
+				},
 			},
 		}
-		dataJsonStr, err := json.Marshal(data)
-		if err != nil {
-			logrus.Error(err)
-		}
-		Request("POST", "/api", string(dataJsonStr), nil)
+		logrus.Infof("channel：%v", Channel)
+		Request("POST", "/api", []params{data}, nil)
 	},
 }

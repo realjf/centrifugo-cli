@@ -12,6 +12,13 @@ var unsubscribeCmd = &cobra.Command{
 	Use:   "unsubscribe",
 	Short: "allows to unsubscribe user from channel",
 	Run: func(cmd *cobra.Command, args []string) {
-
+		data := params{
+			Method: "unsubscribe",
+			Params: map[string]interface{}{
+				"channel": Channel,
+				"user":    UserID,
+			},
+		}
+		Request("POST", "/api", []params{data}, nil)
 	},
 }

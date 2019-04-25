@@ -17,7 +17,7 @@ var UserID string
 var Channel string // 当前channel
 var Channels []string
 
-var Data []string
+var Data string
 
 var ConnectProtocol string // websocket|http
 

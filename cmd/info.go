@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -19,10 +18,7 @@ var infoCmd = &cobra.Command{
 			Method: "info",
 			Params: map[string]interface{}{},
 		}
-		dataJsonStr, err := json.Marshal(data)
-		if err != nil {
-			logrus.Error(err)
-		}
-		Request("POST", "/api", string(dataJsonStr), nil)
+
+		Request("POST", "/api", []params{data}, nil)
 	},
 }

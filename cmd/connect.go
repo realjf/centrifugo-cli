@@ -21,7 +21,14 @@ var connectCmd = &cobra.Command{
 		logrus.Infof("port：%d", Port)
 		logrus.Infof("engine：%s", Engine)
 		logrus.Infoln("connecting...")
-		logrus.Infof("token：%s", _token())
-		Request("GET", GetPath(), "", nil)
+		data := params{
+			Method: "connect",
+			Params: map[string]interface{}{
+				"token": "JWT",
+				"data": struct {
+				}{},
+			},
+		}
+		Request("POST", "/api", []params{data}, nil)
 	},
 }

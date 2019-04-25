@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +15,12 @@ var presenceCmd = &cobra.Command{
 	Short: "allows to get channel presence information",
 	Long:  `allows to get channel presence information(all clients currently subscribed on this channel)`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("presence")
+		data := params{
+			Method: "presence",
+			Params: map[string]interface{}{
+				"channel": Channel,
+			},
+		}
+		Request("POST", "/api", []params{data}, nil)
 	},
 }
