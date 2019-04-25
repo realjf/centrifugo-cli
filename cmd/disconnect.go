@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
 
 func init() {
 	rootCmd.AddCommand(disconnectCmd)
-	disconnectCmd.PersistentFlags().StringVarP(&UserID, "user", "u", "", "user id key")
+	disconnectCmd.PersistentFlags().Uint32VarP(&UserID, "user", "u", 0, "user id")
 }
 
 var disconnectCmd = &cobra.Command{

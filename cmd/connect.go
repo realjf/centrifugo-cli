@@ -10,8 +10,7 @@ func init() {
 	connectCmd.PersistentFlags().StringVarP(&Address, "address", "a", "", "bind your centrifugo to specific interface address")
 	connectCmd.PersistentFlags().IntVarP(&Port, "port", "p", 8000, "port to bind centrifugo to")
 	connectCmd.PersistentFlags().StringVarP(&Engine, "engine", "e", "memory", "engine to use - memory or redis")
-	connectCmd.PersistentFlags().StringVarP(&ConnectProtocol, "connect-protocol", "c", "http", "communication protocol")
-	connectCmd.PersistentFlags().StringVarP(&UserID, "user", "u", "", "user id")
+	connectCmd.PersistentFlags().Uint32VarP(&UserID, "user", "u", 0, "user id")
 }
 
 var connectCmd = &cobra.Command{
@@ -21,16 +20,21 @@ var connectCmd = &cobra.Command{
 		logrus.Infof("address：%s", Address)
 		logrus.Infof("port：%d", Port)
 		logrus.Infof("engine：%s", Engine)
+		logrus.Infof("user id: %d", UserID)
+		if UserID <= 0 {
+			logrus.Error("need user id to continue")
+		}
 		logrus.Infoln("connecting...")
 		data := params{
+			ID:     UserID,
 			Method: "connect",
 			Params: map[string]interface{}{
-				"token": "JWT",
+				"token": _token(UserID),
 				"data": struct {
 				}{},
 			},
 		}
-		logrus.Infof("user id: %s", UserID)
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data})
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }

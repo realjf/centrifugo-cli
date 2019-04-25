@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 func init() {
 	rootCmd.AddCommand(unsubscribeCmd)
 	unsubscribeCmd.PersistentFlags().StringVarP(&Channel, "channel", "c", "", "channel key")
-	unsubscribeCmd.PersistentFlags().StringVarP(&UserID, "user", "u", "", "user id")
+	unsubscribeCmd.PersistentFlags().Uint32VarP(&UserID, "user", "u", 0, "user id")
 }
 
 var unsubscribeCmd = &cobra.Command{

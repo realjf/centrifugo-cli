@@ -13,13 +13,11 @@ var Secret string
 var ApiKey string
 var Token string
 
-var UserID string
+var UserID uint32
 var Channel string // 当前channel
 var Channels []string
 
 var Data string
-
-var ConnectProtocol string // websocket|http
 
 func init() {
 	rootCmd.AddCommand(configCmd)
