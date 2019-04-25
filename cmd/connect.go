@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -35,7 +36,22 @@ var connectCmd = &cobra.Command{
 				}{},
 			},
 		}
-		WebSocket([]params{data}, nil)
+		message := WebSocket([]params{data}, nil)
+		var result struct {
+			ID     int `json:"id"`
+			Result struct {
+				Client  string `json:"client"`
+				Version string `json:"version"`
+				Expires bool   `json:"expires"`
+				Ttl     int    `json:"ttl"`
+			}
+		}
+		err := json.Unmarshal(message.([]byte), &result)
+		if err != nil {
+			logrus.Error(err)
+		}
+		ClientConnectionID = result.Result.Client
+
 		//Request("POST", "/api", []params{data}, nil)
 	},
 }

@@ -18,6 +18,7 @@ var publishCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Infoln("publishing...")
 		data := params{
+			ID:     UserID,
 			Method: "publish",
 			Params: map[string]interface{}{
 				"channel": Channel,

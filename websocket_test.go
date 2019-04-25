@@ -42,6 +42,21 @@ func websock() {
 		}
 
 		fmt.Printf("received: %s\n", message)
+		var data struct {
+			ID     int `json:"id"`
+			Result struct {
+				Client  string `json:"client"`
+				Version string `json:"version"`
+				Expires bool   `json:"expires"`
+				Ttl     int    `json:"ttl"`
+			}
+		}
+		err = json.Unmarshal([]byte(message), &data)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Printf("received: %v\n", data)
 	}
 }
 

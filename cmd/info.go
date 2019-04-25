@@ -15,10 +15,14 @@ var infoCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		logrus.Infoln("requesting...")
 		data := params{
+			ID:     UserID,
 			Method: "info",
-			Params: map[string]interface{}{},
+			Params: map[string]interface{}{
+				"token": _token(UserID),
+			},
 		}
 
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }

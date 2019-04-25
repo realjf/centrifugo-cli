@@ -21,6 +21,8 @@ var Path string // websocket path
 
 var Data string
 
+var ClientConnectionID string
+
 func init() {
 	rootCmd.AddCommand(configCmd)
 }
@@ -35,9 +37,11 @@ var configCmd = &cobra.Command{
 		logrus.Infof("secret：%s", Secret)
 		logrus.Infof("ApiKey：%s", ApiKey)
 		logrus.Infof("Token：%s", Token)
-		logrus.Infof("UserID：%s", UserID)
+		logrus.Infof("UserID：%v", UserID)
 		logrus.Infof("Channel：%s", Channel)
+		logrus.Infof("Path: %s", Path)
 		logrus.Infof("Channels：%v", Channels)
 		logrus.Infof("Data：%v", Data)
+		logrus.Infof("unique client connection id：%v", ClientConnectionID)
 	},
 }

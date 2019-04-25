@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func WebSocket(cmds []params, header http.Header) {
+func WebSocket(cmds []params, header http.Header) interface{} {
 	uri := url.URL{
 		Scheme: "ws",
 		Path:   Path,
@@ -37,7 +37,7 @@ func WebSocket(cmds []params, header http.Header) {
 	conn, _, err := dialer.Dial(uri.String(), header)
 	if err != nil {
 		logrus.Error(err)
-		return
+		return nil
 	}
 
 	go timeWriter(conn, &buf)
@@ -47,10 +47,11 @@ func WebSocket(cmds []params, header http.Header) {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			logrus.Error(err)
-			return
+			return nil
 		}
 
 		logrus.Infof("received: %s\n", message)
+		return message
 	}
 }
 

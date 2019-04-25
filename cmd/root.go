@@ -34,7 +34,7 @@ func _token(user uint32) string {
 	claims := make(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(1)).Unix() // jwt过期时间
 	claims["iat"] = time.Now().Unix()                                   // jwt签发时间
-	claims["sub"] = user
+	claims["sub"] = string(user)
 
 	Token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(Secret))
 	if err != nil {

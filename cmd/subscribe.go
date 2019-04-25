@@ -1,6 +1,9 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"net/http"
+)
 
 func init() {
 	rootCmd.AddCommand(subscribeCmd)
@@ -13,12 +16,18 @@ var subscribeCmd = &cobra.Command{
 	Short: "subscribe on channels",
 	Run: func(cmd *cobra.Command, args []string) {
 		data := params{
+			ID:     UserID,
 			Method: "subscribe",
 			Params: map[string]interface{}{
 				"channel": Channel,
-				"user":    UserID,
+				"token":   _token(UserID),
+				"client":  ClientConnectionID,
 			},
 		}
-		Request("POST", "/api", []params{data}, nil)
+
+		header := http.Header{}
+		header.Add("Authorization", "token "+_token(UserID))
+		WebSocket([]params{data}, header)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }
