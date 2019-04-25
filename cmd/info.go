@@ -17,9 +17,7 @@ var infoCmd = &cobra.Command{
 		data := params{
 			ID:     UserID,
 			Method: "info",
-			Params: map[string]interface{}{
-				"token": _token(UserID),
-			},
+			Params: map[string]interface{}{},
 		}
 
 		WebSocket([]params{data}, nil)

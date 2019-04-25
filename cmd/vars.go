@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"net/url"
 )
 
 var Address string // centrifugo server address
@@ -24,6 +25,7 @@ var Data string
 
 var ClientConnectionID string
 var WebSocketConn *websocket.Conn
+var URI url.URL
 
 func init() {
 	rootCmd.AddCommand(configCmd)

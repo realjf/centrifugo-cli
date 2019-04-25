@@ -31,9 +31,11 @@ func main() {
 func Run(cmdString string) error {
 	cmdString = strings.TrimSuffix(cmdString, "\n")
 	arrCommandStr := strings.Fields(cmdString)
-	switch arrCommandStr[0] {
-	case "exit":
-		os.Exit(0)
+	if len(arrCommandStr) > 0 {
+		switch arrCommandStr[0] {
+		case "exit":
+			os.Exit(0)
+		}
 	}
 
 	cmd.Exec(arrCommandStr)

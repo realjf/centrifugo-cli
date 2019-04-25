@@ -13,6 +13,7 @@ var broadcastCmd = &cobra.Command{
 	Short: "similar to publish but allows to send the same data into many channels",
 	Run: func(cmd *cobra.Command, args []string) {
 		data := params{
+			ID:     UserID,
 			Method: "broadcast",
 			Params: map[string]interface{}{
 				"channels": Channels,
@@ -21,6 +22,7 @@ var broadcastCmd = &cobra.Command{
 				},
 			},
 		}
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }

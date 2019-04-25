@@ -13,11 +13,13 @@ var historyCmd = &cobra.Command{
 	Long:  `allows to get channel history information (list of last messages published into channel)`,
 	Run: func(cmd *cobra.Command, args []string) {
 		data := params{
+			ID:     UserID,
 			Method: "history",
 			Params: map[string]interface{}{
 				"channel": Channel,
 			},
 		}
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }

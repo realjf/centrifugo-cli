@@ -12,11 +12,13 @@ var disconnectCmd = &cobra.Command{
 	Short: "allows to disconnect user by ID",
 	Run: func(cmd *cobra.Command, args []string) {
 		data := params{
+			ID:     UserID,
 			Method: "disconnect",
 			Params: map[string]interface{}{
 				"user": UserID,
 			},
 		}
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }
