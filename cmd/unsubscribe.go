@@ -19,6 +19,7 @@ var unsubscribeCmd = &cobra.Command{
 				"channel": Channel,
 			},
 		}
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }

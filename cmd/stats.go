@@ -14,12 +14,14 @@ var presenceStatsCmd = &cobra.Command{
 	Short: "allows to get short channel presence information",
 	Run: func(cmd *cobra.Command, args []string) {
 		data := params{
+			ID:     UserID,
 			Method: "presence_stats",
 			Params: map[string]interface{}{
 				"channel": Channel,
 			},
 		}
 
-		Request("GET", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("GET", "/api", []params{data}, nil)
 	},
 }

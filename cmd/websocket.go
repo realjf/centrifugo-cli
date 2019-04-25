@@ -33,18 +33,21 @@ func WebSocket(cmds []params, header http.Header) interface{} {
 	logrus.Infof("request uri: %v", uri.String())
 	logrus.Infof("request header: %v", header)
 	logrus.Infof("request data: %v", cmds)
-	var dialer *websocket.Dialer
-	conn, _, err := dialer.Dial(uri.String(), header)
-	if err != nil {
-		logrus.Error(err)
-		return nil
+	var err error
+	if WebSocketConn == nil {
+		var dialer *websocket.Dialer
+		WebSocketConn, _, err = dialer.Dial(uri.String(), header)
+		if err != nil {
+			logrus.Error(err)
+			return nil
+		}
 	}
 
-	go timeWriter(conn, &buf)
+	go timeWriter(WebSocketConn, &buf)
 
 	for {
 		logrus.Info("reading message...")
-		_, message, err := conn.ReadMessage()
+		_, message, err := WebSocketConn.ReadMessage()
 		if err != nil {
 			logrus.Error(err)
 			return nil

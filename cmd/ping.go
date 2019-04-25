@@ -1,6 +1,8 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+)
 
 func init() {
 	rootCmd.AddCommand(pingCmd)
@@ -14,6 +16,8 @@ var pingCmd = &cobra.Command{
 			ID:     UserID,
 			Method: "ping",
 		}
-		Request("POST", "/api", []params{data}, nil)
+
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }

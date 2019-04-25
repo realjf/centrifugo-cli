@@ -28,6 +28,7 @@ var publishCmd = &cobra.Command{
 			},
 		}
 		logrus.Infof("channel：%v", Channel)
-		Request("POST", "/api", []params{data}, nil)
+		WebSocket([]params{data}, nil)
+		//Request("POST", "/api", []params{data}, nil)
 	},
 }
