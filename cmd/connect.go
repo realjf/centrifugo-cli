@@ -11,6 +11,7 @@ func init() {
 	connectCmd.PersistentFlags().IntVarP(&Port, "port", "p", 8000, "port to bind centrifugo to")
 	connectCmd.PersistentFlags().StringVarP(&Engine, "engine", "e", "memory", "engine to use - memory or redis")
 	connectCmd.PersistentFlags().StringVarP(&ConnectProtocol, "connect-protocol", "c", "http", "communication protocol")
+	connectCmd.PersistentFlags().StringVarP(&UserID, "user", "u", "", "user id")
 }
 
 var connectCmd = &cobra.Command{
@@ -29,6 +30,7 @@ var connectCmd = &cobra.Command{
 				}{},
 			},
 		}
+		logrus.Infof("user id: %s", UserID)
 		Request("POST", "/api", []params{data}, nil)
 	},
 }

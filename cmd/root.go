@@ -34,8 +34,7 @@ var rootCmd = &cobra.Command{
 func Exec(args []string) {
 	rootCmd.SetArgs(args)
 	if err := rootCmd.Execute(); err != nil {
-		logrus.Fatal(err)
-		os.Exit(1)
+		logrus.Error(err)
 	}
 }
 
@@ -58,6 +57,7 @@ func GetHost() string {
 }
 
 type params struct {
+	ID     uint32                 `json:"id"`
 	Method string                 `json:"method"`
 	Params map[string]interface{} `json:"params"`
 }

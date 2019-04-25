@@ -5,6 +5,7 @@ import "github.com/spf13/cobra"
 func init() {
 	rootCmd.AddCommand(subscribeCmd)
 	subscribeCmd.PersistentFlags().StringVarP(&Channel, "channel", "c", "", "channel key")
+	subscribeCmd.PersistentFlags().StringVarP(&UserID, "user", "u", "", "user id")
 }
 
 var subscribeCmd = &cobra.Command{
@@ -15,6 +16,7 @@ var subscribeCmd = &cobra.Command{
 			Method: "subscribe",
 			Params: map[string]interface{}{
 				"channel": Channel,
+				"user":    UserID,
 			},
 		}
 		Request("POST", "/api", []params{data}, nil)
