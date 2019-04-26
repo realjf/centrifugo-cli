@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/websocket"
-	"net/url"
+	"golang.org/x/net/websocket"
+	//"net/url"
 	"testing"
 	"time"
 )
@@ -19,23 +19,23 @@ func TestWebSock(t *testing.T) {
 }
 
 func websock() {
-	uri := url.URL{
-		Scheme: "ws",
-		Host:   "localhost:8000",
-		Path:   "/connection/websocket",
-	}
+	//uri := url.URL{
+	//	Scheme: "ws",
+	//	Host:   "localhost:8000",
+	//	Path:   "/connection/websocket",
+	//}
 
-	var dialer *websocket.Dialer
-	conn, _, err := dialer.Dial(uri.String(), nil)
+	ws, err := websocket.Dial(Url, "", Origin)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	go timeWriter(conn)
+	go timeWriter(ws)
 
 	for {
-		_, message, err := conn.ReadMessage()
+		var message string
+		err := websocket.Message.Receive(ws, &message)
 		if err != nil {
 			fmt.Println("read:", err)
 			return
@@ -60,7 +60,7 @@ func websock() {
 	}
 }
 
-func timeWriter(conn *websocket.Conn) {
+func timeWriter(ws *websocket.Conn) {
 	for {
 		time.Sleep(time.Second * 2)
 		hell := map[string]interface{}{
@@ -73,7 +73,10 @@ func timeWriter(conn *websocket.Conn) {
 			},
 		}
 		data, _ := json.Marshal(&hell)
-		conn.WriteMessage(websocket.TextMessage, []byte(data))
+		err := websocket.Message.Send(ws, data)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 

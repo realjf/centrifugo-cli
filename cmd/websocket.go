@@ -3,8 +3,9 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/net/websocket"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,7 +17,7 @@ const (
 	writeWait = 10 * time.Second
 
 	// Time allowed to read the next pong message from the peer.
-	pongWait = 60 * time.Second
+	pongWait = 60 * time.Hour
 
 	// Send pings to peer with this period. Must be less than pongWait.
 	pingPeriod = (pongWait * 9) / 10
@@ -25,7 +26,7 @@ const (
 	maxMessageSize = 512 * 100000
 )
 
-func WebSocket(cmds []params, header http.Header) interface{} {
+func WebSocket(cmds []params, header http.Header) {
 	URI = url.URL{
 		Scheme: "ws",
 		Path:   Path,
@@ -47,48 +48,56 @@ func WebSocket(cmds []params, header http.Header) interface{} {
 	logrus.Infof("request uri: %v", URI.String())
 	logrus.Infof("request header: %v", header)
 	logrus.Infof("request data: %v", cmds)
-	CreateConn(URI, header)
+	CreateConn()
 
 	// 检查websocket链接
-	go HeartCheck(WebSocketConn)
 	go timeWriter(WebSocketConn, &buf)
-	return ReadPipe(WebSocketConn)
+	go ReadPipe(WebSocketConn)
 }
 
-func CreateConn(uri url.URL, header http.Header) {
+func CreateConn() {
 	var err error
 	if WebSocketConn == nil {
-		var dialer *websocket.Dialer
-		WebSocketConn, _, err = dialer.Dial(uri.String(), header)
+		WebSocketConn, err = websocket.Dial(URI.String(), "", URI.Host)
 		if err != nil {
 			logrus.Error(err)
 		}
-	}
-	err = WebSocketConn.SetReadDeadline(time.Now().Add(pongWait))
-	if err != nil {
-		logrus.Error(err)
 	}
 }
 
-func ReadPipe(conn *websocket.Conn) interface{} {
+func ReadPipe(conn *websocket.Conn) {
+	conn.SetReadDeadline(time.Now().Add(pongWait))
 	for {
-		logrus.Info("reading message...")
-
-		_, message, err := conn.ReadMessage()
+		var message []byte
+		err := websocket.Message.Receive(conn, &message)
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				logrus.Error(err)
-				return nil
-			}
-			if websocket.IsCloseError(err, websocket.CloseGoingAway, websocket.CloseNormalClosure) {
-				logrus.Error(err)
-				return nil
+			if err == io.EOF {
+				time.Sleep(time.Second * 3)
+				continue
 			}
 			logrus.Error(err)
+			break
+		}
+		logrus.Info("reading message...")
+		logrus.Infof("received: %s\n", message)
+		var data struct {
+			ID     int `json:"id"`
+			Result struct {
+				Client  string `json:"client"`
+				Version string `json:"version"`
+				Expires bool   `json:"expires"`
+				Ttl     int    `json:"ttl"`
+			}
+		}
+		err = json.Unmarshal([]byte(message), &data)
+		if err != nil {
+			logrus.Error(err)
+		}
+		if data.Result.Client != "" {
+			ClientConnectionID = data.Result.Client
 		}
 
-		logrus.Infof("received: %s\n", message)
-		return message
+		ReadChan <- message
 	}
 }
 
@@ -110,13 +119,19 @@ func HeartCheck(conn *websocket.Conn) {
 }
 
 func timeWriter(conn *websocket.Conn, buffer *bytes.Buffer) {
+	conn.SetWriteDeadline(time.Now().Add(pongWait))
 	for {
 		time.Sleep(time.Second * 2)
-		err := conn.WriteMessage(websocket.TextMessage, buffer.Bytes())
-		if err != nil {
-			logrus.Error(err)
-			return
+		if buffer.Len() > 0 {
+			err := websocket.Message.Send(conn, buffer.Bytes())
+			if err != nil {
+				logrus.Error(err)
+				WebSocketConn, err = websocket.Dial(URI.String(), "", URI.Host)
+				if err != nil {
+					logrus.Error(err)
+				}
+			}
+			buffer.Truncate(0)
 		}
-		break
 	}
 }

@@ -17,6 +17,8 @@ var broadcastCmd = &cobra.Command{
 			Method: "broadcast",
 			Params: map[string]interface{}{
 				"channels": Channels,
+				"user":     UserID,
+				"client":   ClientConnectionID,
 				"data": map[string]string{
 					"text": Data,
 				},

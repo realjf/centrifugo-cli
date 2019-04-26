@@ -14,6 +14,7 @@ func init() {
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
+	cmd.ReadChan = make(chan []byte, 204800)
 	for {
 		fmt.Print("$ ")
 		cmdString, err := reader.ReadString('\n')

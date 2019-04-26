@@ -22,6 +22,8 @@ var publishCmd = &cobra.Command{
 			Method: "publish",
 			Params: map[string]interface{}{
 				"channel": Channel,
+				"user":    UserID,
+				"client":  ClientConnectionID,
 				"data": map[string]string{
 					"text": Data,
 				},

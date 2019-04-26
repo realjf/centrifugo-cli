@@ -3,7 +3,7 @@ package cmd
 import "github.com/spf13/cobra"
 
 func init() {
-	rootCmd.AddCommand(channelsCmd)
+	//rootCmd.AddCommand(channelsCmd)
 }
 
 var channelsCmd = &cobra.Command{

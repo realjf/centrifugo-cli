@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"golang.org/x/net/websocket"
 	"net/url"
 )
 
@@ -26,6 +26,7 @@ var Data string
 var ClientConnectionID string
 var WebSocketConn *websocket.Conn
 var URI url.URL
+var ReadChan chan []byte
 
 func init() {
 	rootCmd.AddCommand(configCmd)

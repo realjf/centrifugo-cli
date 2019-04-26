@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(infoCmd)
+	//rootCmd.AddCommand(infoCmd)
 }
 
 var infoCmd = &cobra.Command{
@@ -17,7 +17,6 @@ var infoCmd = &cobra.Command{
 		data := params{
 			ID:     UserID,
 			Method: "info",
-			Params: map[string]interface{}{},
 		}
 
 		WebSocket([]params{data}, nil)
