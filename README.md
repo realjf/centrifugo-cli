@@ -1,5 +1,5 @@
 # centrifugo-cli
-centrifugo command line app
+centrifugo v2.2.1 command line app
 
 ```
 # 首先运行程序
